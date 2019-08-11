@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
+import { ProductService } from '../../services/product.service';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
@@ -12,13 +12,16 @@ export class EditPageComponent implements OnInit {
   productForm: FormGroup;
   product: any
 
-  constructor(private actRoute: ActivatedRoute, private fb: FormBuilder) {
+  constructor(private productService: ProductService,private actRoute: ActivatedRoute, private fb: FormBuilder) {
     this.createForm()
   }
 
   ngOnInit() {
     this.actRoute.params.subscribe(params => {
-
+      this.productService.loadDetailProduct(params['id']).subscribe(res => {
+        this.product = res
+        console.log(res)
+      })
     })
   }
 
@@ -32,7 +35,7 @@ export class EditPageComponent implements OnInit {
 
   clickUpdate(productName, category, price) {
     this.actRoute.params.subscribe(params => {
-
+      this.productService.updateProduct(params['id'], productName, category, price)
     })
   }
 
